@@ -1,6 +1,7 @@
 import CanvasConfig from "./config/CanvasConfig";
 import EnemySpawner from "./service/EnemySpawner";
-import Service from './interface/Service';
+import GameController from './service/GameController';
+import LoadedServices from './interface/LoadedServices';
 
 export default class App {
     private canvas: HTMLCanvasElement;
@@ -17,6 +18,7 @@ export default class App {
     }
 
     private initServices(): void {
+        this.services.gameController = new GameController();
         this.services.enemySpawner = new EnemySpawner(this.canvasCtx, this.canvas.width, this.canvas.height);
     }
 
@@ -35,8 +37,4 @@ export default class App {
     public getService(service: string): any {
         return this.services[service];
     }
-}
-
-interface LoadedServices {
-    [key: string]: Service
 }

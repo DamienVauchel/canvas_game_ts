@@ -1,10 +1,10 @@
-export default class AbstractCircleElement {
+export default abstract class AbstractCircleElement {
     constructor(
         protected readonly ctx: CanvasRenderingContext2D, 
-        protected x: number, 
-        protected y: number, 
-        protected readonly radius: number, 
-        protected readonly color: string
+        public x: number, 
+        public y: number, 
+        public radius: number, 
+        public readonly color: string
     ) {}
 
     render(): void {

@@ -1,7 +1,7 @@
 import AbstractCircleElement from './AbstractCircleElement';
 import VelocityInterface from '../../interface/Velocity';
 
-export default class AbstractVelocityCircleElement extends AbstractCircleElement {
+export default abstract class AbstractVelocityCircleElement extends AbstractCircleElement {
     constructor(
         ctx: CanvasRenderingContext2D, 
         x: number, 

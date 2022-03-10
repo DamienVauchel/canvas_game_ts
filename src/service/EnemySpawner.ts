@@ -1,3 +1,4 @@
+import Colorizer from '../util/Colorizer';
 import Enemy from "../model/Enemy";
 
 export default class EnemySpawner {
@@ -7,15 +8,9 @@ export default class EnemySpawner {
         private readonly canvasHeight: number, 
         private maxRandomRadius: number = 50, 
         private minRandomRadius: number = 5
-    ) {
-        this.ctx = ctx;
-        this.canvasWidth = canvasWidth;
-        this.canvasHeight = canvasHeight;
-        this.maxRandomRadius = maxRandomRadius;
-        this.minRandomRadius = minRandomRadius;
-    }
+    ) {}
 
-    spawnOneRandom(playerX: number, playerY: number) {
+    public spawnOneRandom(playerX: number, playerY: number) {
         const radius = Math.random() * (this.maxRandomRadius - this.minRandomRadius) + this.minRandomRadius;
         let x;
         let y;
@@ -34,6 +29,6 @@ export default class EnemySpawner {
             y: Math.sin(angle)
         };
 
-        return new Enemy(this.ctx, x, y, radius, 'red', velocity);
+        return new Enemy(this.ctx, x, y, radius, Colorizer.randomColor(), velocity);
     }
 }
