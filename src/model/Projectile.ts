@@ -1,3 +1,3 @@
-import AbstractVelocityCircleElement from "./abstract/AbstractVelocityCircleElement";
+import AbstractVelocityCircleElement from './abstract/AbstractVelocityCircleElement';
 
 export default class Projectile extends AbstractVelocityCircleElement {}

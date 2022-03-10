@@ -1,5 +1,5 @@
 import Colorizer from '../util/Colorizer';
-import Enemy from "../model/Enemy";
+import Enemy from '../model/Enemy';
 
 export default class EnemySpawner {
     constructor(

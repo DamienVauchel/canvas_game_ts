@@ -1,5 +1,5 @@
-import AbstractCircleElement from "./abstract/AbstractCircleElement";
-import Projectile from "./Projectile";
+import AbstractCircleElement from './abstract/AbstractCircleElement';
+import Projectile from './Projectile';
 
 export default class Player extends AbstractCircleElement {
     private PROJECTILE_VELOCITY_MULTIPLIER = 5;

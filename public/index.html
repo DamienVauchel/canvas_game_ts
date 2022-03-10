@@ -5,12 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multi player game</title>
-    <link rel="stylesheet" href="./main.css">
+    <link rel="stylesheet" href="main.css">
 </head>
 
 <body>
+    <div id="score">
+        <span id="score-label">Score :</span>
+        <span id="score-count">0</span>
+    </div>
+
+    <div id="game-over-modal">
+        <h1 id="game-over-modal-score">0</h1>
+        <p>Points</p>
+        <button id="start-game-button">Start Game</button>
+    </div>
+
     <canvas></canvas>
-    <script>var exports = {"__esModule": true};</script>
     <script src="bundle.js"></script>
 </body>
 </html>

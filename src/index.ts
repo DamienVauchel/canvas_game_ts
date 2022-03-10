@@ -1,25 +1,27 @@
-import Enemy from "./model/Enemy";
-import Particle from "./model/Particle";
-import Player from "./model/Player";
-import Projectile from "./model/Projectile";
-import App from "./App";
-import EnemySpawner from "./service/EnemySpawner";
-import GameController from "./service/GameController";
+import Enemy from './model/Enemy';
+import Particle from './model/Particle';
+import Player from './model/Player';
+import Projectile from './model/Projectile';
+import App from './App';
+import EnemySpawner from './service/EnemySpawner';
+import GameController from './service/GameController';
 import DistanceComputer from './util/DistanceComputer';
+import ScoreManager from './service/ScoreManager';
 
 const app: App = new App();
 const canvas: HTMLCanvasElement = app.getCanvas();
 const canvasCtx: CanvasRenderingContext2D = app.getCanvasCtx();
 const enemySpawner: EnemySpawner = app.getService('enemySpawner');
 const gameController: GameController = app.getService('gameController');
+const scoreManager: ScoreManager = app.getService('scoreManager');
 
 const playerX = canvas.width / 2;
 const playerY = canvas.height / 2;
 
 const player = new Player(canvasCtx, playerX, playerY, 10, '#fff');
-const projectiles: Projectile[] = [];
-const enemies: Enemy[] = [];
-const particles: Particle[] = [];
+let projectiles: Projectile[] = [];
+let enemies: Enemy[] = [];
+let particles: Particle[] = [];
 
 let animationId: number;
 
@@ -48,15 +50,7 @@ const animateParticles = () => {
 const animateProjectiles = () => {
     projectiles.forEach((projectile, i) => {
         projectile.updatePosition();
-
-        if (
-            projectile.x + projectile.radius < 0 ||
-            projectile.x - projectile.radius > canvas.width ||
-            projectile.y + projectile.radius < 0 ||
-            projectile.y - projectile.radius > canvas.height
-        ) {
-            removeProjectile(i);
-        }
+        cleanProjectile(projectile, i)
     })
 }
 
@@ -83,12 +77,25 @@ const manageProjectileEnemyCollision = (projectile: Projectile, enemy: Enemy, pr
         particles.push(...enemy.explode());
 
         if (enemy.radius - 10 > 5) {
+            scoreManager.increase();
             enemy.shrink();            
             removeProjectile(projectileIndex);
         } else {
+            scoreManager.increase(250);
             removeEnemy(enemyIndex);
             removeProjectile(projectileIndex);
         }
+    }
+}
+
+const cleanProjectile = (projectile: Projectile, projectileIndex: number) => {
+    if (
+        projectile.x + projectile.radius < 0 ||
+        projectile.x - projectile.radius > canvas.width ||
+        projectile.y + projectile.radius < 0 ||
+        projectile.y - projectile.radius > canvas.height
+    ) {
+        removeProjectile(projectileIndex);
     }
 }
 
@@ -110,9 +117,14 @@ const spawnEnemies = () => {
     }, 1000);
 };
 
+const initGame = () => {
+    projectiles = [];
+    enemies = [];
+    particles = [];
+}
+
 addEventListener('click', event => {
     projectiles.push(player.shoot(event.clientX, event.clientY));
-})
+});
 
-animate();
-spawnEnemies();
+gameController.startGame(initGame, animate, spawnEnemies);
