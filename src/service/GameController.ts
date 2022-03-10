@@ -1,17 +1,31 @@
+import ParticleManager from '../manager/ParticleManager';
+import ProjectileManager from '../manager/ProjectileManager';
+import EnemyManager from '../manager/EnemyManager';
 import ScoreManager from './ScoreManager';
 
 export default class GameController {
     public readonly gameOverModal: HTMLElement = document.getElementById('game-over-modal')!;
     public readonly startGameBtn: HTMLElement = document.getElementById('start-game-button')!;
 
-    constructor(private readonly scoreManager: ScoreManager){}
+    constructor(
+        private readonly scoreManager: ScoreManager,
+        private readonly enemyManager: EnemyManager,
+        private readonly projectileManager: ProjectileManager,
+        private readonly particleManager: ParticleManager
+    ){}
 
-    public startGame(initGame: Function, animate: Function, spawnEnemies: Function): void {
+    private initGame() {
+        this.projectileManager.projectiles = [];
+        this.enemyManager.enemies = [];
+        this.particleManager.particles = [];
+    }
+
+    public startGame(animate: Function, playerX: number, playerY: number): void {
         this.startGameBtn.addEventListener('click', () => {
-            initGame();
+            this.initGame();
             this.gameOverModal.style.display = 'none';
             animate();
-            spawnEnemies();
+            this.enemyManager.spawnEnemies(playerX, playerY);
             this.scoreManager.score = 0;
             this.scoreManager.refreshRender();
         });
