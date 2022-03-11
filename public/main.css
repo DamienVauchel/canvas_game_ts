@@ -2,6 +2,7 @@ body {
     margin: 0;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     background: #000;
+    overflow: hidden;
 }
 
 button {
@@ -26,6 +27,7 @@ button {
 #game-over-modal {
     display: flex;
     position: fixed;
+    user-select: none;
     top: 25vh;
     left: 25vw;
     width: 50vw;

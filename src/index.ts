@@ -1,7 +1,6 @@
 import Player from './model/Player';
 import App from './App';
 import GameController from './service/GameController';
-import DistanceComputer from './util/DistanceComputer';
 import ProjectileManager from './manager/ProjectileManager';
 import EnemyManager from './manager/EnemyManager';
 import CollisionManager from './manager/CollisionManager';
@@ -17,10 +16,7 @@ const enemyManager: EnemyManager = app.serviceManager.services.enemyManager;
 const particleManager: ParticleManager = app.serviceManager.services.particleManager;
 const projectileManager: ProjectileManager = app.serviceManager.services.projectileManager;
 
-const playerX = canvas.width / 2;
-const playerY = canvas.height / 2;
-
-const player = new Player(canvasCtx, playerX, playerY, 10, '#fff');
+const player = new Player(canvasCtx, canvas.width / 2, canvas.height / 2, 10, '#fff')
 
 let animationId: number;
 
@@ -33,7 +29,7 @@ const animate = () => {
     player.render();
     animateParticles();
     animateProjectiles();
-    animateEnemies(player, animationId);
+    animateEnemies();
 };
 
 const animateProjectiles = () => {
@@ -53,24 +49,17 @@ const animateParticles = () => {
     });
 }
 
-const animateEnemies = (player: Player, animationId: number) => {
+const animateEnemies = () => {
     enemyManager.enemies.forEach((enemy, i) => {
         enemy.updatePosition();
-
-        const dist = DistanceComputer.computeDistBetweenTwoElements(player, enemy);
-
-        if (dist - enemy.radius - player.radius < 1) {
-            gameController.endGame(animationId);
-        }
+        collisionManager.enemyPlayerCollision(enemy, player, animationId)
 
         projectileManager.projectiles.forEach((projectile, j) => {
-            collisionManager.manageProjectileEnemyCollision(projectile, enemy, j, i);
+            collisionManager.projectileEnemyCollision(projectile, enemy, j, i);
         })
     })
 }
 
-addEventListener('click', event => {
-    projectileManager.projectiles.push(player.shoot(event.clientX, event.clientY));
-});
-
-gameController.startGame(animate, playerX, playerY);
+player.addShootEventListener(projectileManager);
+player.addControlEventListener(enemyManager);
+gameController.startGame(animate, player, canvas.width / 2, canvas.height / 2);

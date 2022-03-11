@@ -1,3 +1,5 @@
+import Player from "../model/Player";
+import GameController from "../service/GameController";
 import Enemy from "../model/Enemy";
 import Projectile from "../model/Projectile";
 import ScoreManager from "../service/ScoreManager";
@@ -11,10 +13,11 @@ export default class CollisionManager {
         private readonly scoreManager: ScoreManager,
         private readonly projectileManager: ProjectileManager,
         private readonly enemyManager: EnemyManager,
-        private readonly particleManager: ParticleManager
+        private readonly particleManager: ParticleManager,
+        private readonly gameController: GameController
     ){}
 
-    public manageProjectileEnemyCollision(projectile: Projectile, enemy: Enemy, projectileIndex: number, enemyIndex: number) {
+    public projectileEnemyCollision(projectile: Projectile, enemy: Enemy, projectileIndex: number, enemyIndex: number) {
         const dist = DistanceComputer.computeDistBetweenTwoElements(projectile, enemy);
 
         if (dist - enemy.radius - projectile.radius < 1) {
@@ -30,5 +33,14 @@ export default class CollisionManager {
                 this.projectileManager.removeProjectile(projectileIndex);
             }
         }
+    }
+
+    public enemyPlayerCollision(enemy: Enemy, player: Player, animationId: number) {
+        const dist = DistanceComputer.computeDistBetweenTwoElements(player, enemy);
+
+        if (dist - enemy.radius - player.radius < 1) {
+            this.gameController.endGame(animationId);
+        }
+
     }
 }

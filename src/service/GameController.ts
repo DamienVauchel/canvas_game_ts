@@ -2,6 +2,7 @@ import ParticleManager from '../manager/ParticleManager';
 import ProjectileManager from '../manager/ProjectileManager';
 import EnemyManager from '../manager/EnemyManager';
 import ScoreManager from './ScoreManager';
+import Player from '../model/Player';
 
 export default class GameController {
     public readonly gameOverModal: HTMLElement = document.getElementById('game-over-modal')!;
@@ -14,18 +15,19 @@ export default class GameController {
         private readonly particleManager: ParticleManager
     ){}
 
-    private initGame() {
+    public initGame(player: Player, initialX: number, initialY: number): void {
         this.projectileManager.projectiles = [];
         this.enemyManager.enemies = [];
         this.particleManager.particles = [];
+        player.respawn(initialX, initialY);
     }
 
-    public startGame(animate: Function, playerX: number, playerY: number): void {
+    public startGame(animate: Function, player: Player, initialX: number, initialY: number): void {
         this.startGameBtn.addEventListener('click', () => {
-            this.initGame();
+            this.initGame(player, initialX, initialY);
             this.gameOverModal.style.display = 'none';
             animate();
-            this.enemyManager.spawnEnemies(playerX, playerY);
+            this.enemyManager.spawnEnemies(player.x, player.y);
             this.scoreManager.score = 0;
             this.scoreManager.refreshRender();
         });

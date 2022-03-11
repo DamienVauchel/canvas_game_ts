@@ -2,6 +2,7 @@ import Enemy from '../model/Enemy';
 import EnemySpawner from '../service/EnemySpawner';
 
 export default class EnemyManager {
+    public spawnInterval: ReturnType<typeof setInterval>;
     public enemies: Enemy[] = [];
 
     constructor(private readonly enemySpawner: EnemySpawner){}
@@ -13,8 +14,13 @@ export default class EnemyManager {
     }
     
     public spawnEnemies(playerX: number, playerY: number): void {
-        setInterval(() => {
-        this.enemies.push(this.enemySpawner.spawnOneRandom(playerX, playerY));   
-        }, 1000);
+        this.spawnInterval = setInterval(() => {
+            this.enemies.push(this.enemySpawner.spawnOneRandom(playerX, playerY));   
+        }, 800);
     };
+
+    public updateTarget(targetX: number, targetY: number): void {
+        clearInterval(this.spawnInterval);
+        this.spawnEnemies(targetX, targetY);
+    }
 }

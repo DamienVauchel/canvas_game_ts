@@ -21,6 +21,6 @@ export default class ServiceManager {
         this.services.enemyManager = new EnemyManager(this.services.enemySpawner);
         this.services.particleManager = new ParticleManager();
         this.services.gameController = new GameController(this.services.scoreManager, this.services.enemyManager, this.services.projectileManager, this.services.particleManager);
-        this.services.collisionManager = new CollisionManager(this.services.scoreManager, this.services.projectileManager, this.services.enemyManager, this.services.particleManager);
+        this.services.collisionManager = new CollisionManager(this.services.scoreManager, this.services.projectileManager, this.services.enemyManager, this.services.particleManager, this.services.gameController);
     }
 }
